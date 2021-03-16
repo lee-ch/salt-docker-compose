@@ -9,7 +9,6 @@ kubernetes:
     - require:
       - file: /etc/yum.repos.d/kubernetes.repo
 
-
 kubelet:
   service.running:
     - pkg: kubelet

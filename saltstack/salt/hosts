@@ -1,0 +1,5 @@
+{% for ip in grains['ipv4'] -%}
+  {% for host in grains['host'] -%}
+    {{ host }}
+  {%- endfor %}
+{%- endfor %}
