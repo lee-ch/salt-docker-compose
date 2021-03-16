@@ -34,3 +34,11 @@ using Salt.
         True
     minion_1:
         True
+
+
+.. code-block:: bash
+   
+    $ docker exec salt-master salt '*' state.apply docker.software
+    $ docker exec salt-master salt '*' state.apply kubernetes
+
+![alt text](https://github.com/lee-ch/salt-docker-compose/blob/master/image.png?raw=true)
