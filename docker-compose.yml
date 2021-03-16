@@ -2,71 +2,61 @@ version: '3.7'
 services:
   master:
     build:
-      args:
-        MINION_IDS: 'minion_1 minion_2 '
+      args: {MINION_IDS: 'minion_1 minion_2 minion_3 '}
       context: saltstack/master
-    cap_add:
-    - SYS_ADMIN
+    cap_add: [SYS_ADMIN]
     command: /usr/sbin/init
-    container_name: salt-master
-    environment:
-      container: docker
-    hostname: salt-master
+    container_name: master
+    environment: {container: docker}
+    hostname: master
     image: salt-master
     networks:
-      salt:
-        ipv4_address: 172.28.1.1
-    ports:
-    - 4505:4505
-    - 4506:4506
+      salt: {ipv4_address: 172.28.1.1}
+    ports: ['4505:4505', '4506:4506']
     privileged: 'true'
-    volumes:
-    - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    - ./saltstack/salt:/srv/salt
-    - ./saltstack/pillar:/srv/pillar
+    volumes: ['/sys/fs/cgroup:/sys/fs/cgroup:ro', './saltstack/salt:/srv/salt', './saltstack/pillar:/srv/pillar']
   minion1:
-    build:
-      context: saltstack/minion
-    cap_add:
-    - SYS_ADMIN
+    build: {context: saltstack/minion}
+    cap_add: [SYS_ADMIN]
     command: /usr/sbin/init
     container_name: minion_1
-    depends_on:
-    - master
-    environment:
-    - MINION_ID=minion_1
+    depends_on: [master]
+    environment: [MINION_ID=minion_1]
     hostname: minion_1
     image: salt-minion
-    links:
-    - master
-    networks:
-    - salt
+    links: [master]
+    networks: [salt]
     privileged: 'true'
-    volumes:
-    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    volumes: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
   minion2:
-    build:
-      context: saltstack/minion
-    cap_add:
-    - SYS_ADMIN
+    build: {context: saltstack/minion}
+    cap_add: [SYS_ADMIN]
     command: /usr/sbin/init
     container_name: minion_2
-    depends_on:
-    - master
-    environment:
-    - MINION_ID=minion_2
+    depends_on: [master]
+    environment: [MINION_ID=minion_2]
     hostname: minion_2
     image: salt-minion
-    links:
-    - master
-    networks:
-    - salt
+    links: [master]
+    networks: [salt]
     privileged: 'true'
-    volumes:
-    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    volumes: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
+  minion3:
+    build: {context: saltstack/minion}
+    cap_add: [SYS_ADMIN]
+    command: /usr/sbin/init
+    container_name: minion_3
+    depends_on: [master]
+    environment: [MINION_ID=minion_3]
+    hostname: minion_3
+    image: salt-minion
+    links: [master]
+    networks: [salt]
+    privileged: 'true'
+    volumes: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
 networks:
   salt:
     ipam:
       config:
-      - subnet: 172.28.0.0/16
+      - {subnet: 172.28.0.0/16}
       driver: default

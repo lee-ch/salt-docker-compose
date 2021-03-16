@@ -1,3 +1,3 @@
 base:
   '*':
-    - common
+    - docker.software

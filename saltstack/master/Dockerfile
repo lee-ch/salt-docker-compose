@@ -9,6 +9,8 @@ RUN curl -o /bootstrap -Ls https://bootstrap.saltstack.com
 RUN bash /bootstrap -MNPX -p salt-api -p pyOpenSSL -c /tmp
 
 ADD master /etc/salt/master
+ADD formulas /srv/formulas
+ADD kubernetes.repo /etc/yum.repos.d/kubernetes.repo
 #ADD master_minion.pem /etc/salt/pki/master.pem
 #ADD master_minion.pub /etc/salt/pki/master.pub
 #ADD master_minion.pem /etc/salt/pki/minion/minion.pem
@@ -25,3 +27,13 @@ RUN useradd -m saltdev
 RUN echo saltdev | passwd --stdin saltdev
 
 RUN echo 'tmpfs /run tmpfs rw,nosuid,nodev,mode=755 0 0' >> /etc/fstab
+
+RUN curl -o /bootstrap -Ls https://bootstrap.saltstack.com
+RUN bash /bootstrap -PX -c /tmp
+
+#ADD minion1 /etc/salt/minion
+#ADD minion1.pem /etc/salt/pki/minion/minion.pem
+#ADD minion1.pub /etc/salt/pki/minion/minion.pub
+RUN sed -i -e 's/#master:.*/master: master/' /etc/salt/minion
+RUN echo 'tmpfs /run tmpfs rw,nosuid,nodev,mode=755 0 0' >> /etc/fstab
+RUN sed -i -e "s/id:.*/id: master/" /etc/salt/minion

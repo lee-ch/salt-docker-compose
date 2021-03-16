@@ -16,7 +16,7 @@ while getopts ":s:m:h:" opt; do
 done
 
 # Generates docker-compose.yml
-python generate_compose_file.py --scale $SCALE --master $MASTER --hostname $HOSTNAME || exit 1
+python3 generate_compose_file.py --scale $SCALE --master $MASTER --hostname $HOSTNAME || exit 1
 docker-compose up --build -d
 
 timeout=60
